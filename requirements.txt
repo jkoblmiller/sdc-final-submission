@@ -6,6 +6,6 @@ fastapi
 uvicorn[standard]
 python-multipart
 pillow
-numpy
+numpy==1.26.4
 requests
 streamlit
