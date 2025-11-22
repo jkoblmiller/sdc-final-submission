@@ -1,0 +1,20 @@
+# Virtual environment
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Model & data artifacts
+models/
+data/
+wandb/
+*.pth
+*.pt
+*.h5
+
+# OS files
+.DS_Store
+
+# VS Code
+.vscode/
