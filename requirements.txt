@@ -1,0 +1,11 @@
+torch
+torchvision
+timm
+wandb
+fastapi
+uvicorn[standard]
+python-multipart
+pillow
+numpy
+requests
+streamlit
