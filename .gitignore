@@ -1,6 +1,7 @@
 # Virtual environment
 venv/
 1_Model_Training/data_from_wb/
+3_Docker_Backend/Dockerfile
 
 # Python cache
 __pycache__/
@@ -18,3 +19,4 @@ wandb/
 
 # VS Code
 .vscode/
+

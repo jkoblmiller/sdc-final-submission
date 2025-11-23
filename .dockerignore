@@ -1,0 +1,14 @@
+# Ignore large dataset and runtime artifacts
+data_from_wb/
+wandb/
+models/
+__pycache__/
+.git/
+.venv/
+env/
+*.pyc
+*.pth
+*.mat
+*.log
+*.gz
+Docker_Compose/**# Ignore large dataset, logs, model artifacts and VCS

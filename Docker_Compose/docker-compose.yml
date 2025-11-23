@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: ../2_FastAPI_Service
+      dockerfile: Dockerfile
+    container_name: pet_api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../models:/models:ro
+    restart: unless-stopped
+
+  streamlit:
+    build:
+      context: ../4_Streamlit_Frontend
+      dockerfile: Dockerfile
+    container_name: pet_frontend
+    ports:
+      - "8501:8501"
+    environment:
+      - API_URL=http://api:8000/predict
+    depends_on:
+      - api
+    restart: unless-stopped
