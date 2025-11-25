@@ -15,7 +15,7 @@ PROJECT_NAME = "pet-breed-classifier"
 NUM_CLASSES = 37
 IMG_SIZE = 224
 BATCH_SIZE = 32
-EPOCHS = 5  
+EPOCHS = 10  
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
