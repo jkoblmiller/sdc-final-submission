@@ -5,6 +5,8 @@ import torch.nn.functional as F
 import torchvision.transforms as T
 import torchvision.models as models
 from PIL import Image
+import os
+import requests
 
 # Model / labels configuration
 IMG_SIZE = 224
@@ -105,6 +107,41 @@ _VAL_TRANSFORM = T.Compose([
 
 def predict_pil(image: Image.Image):
     """Return (label, confidence) for a PIL image."""
+    # If a TorchServe URL is provided in the environment, prefer remote inference
+    ts_url = os.getenv("TORCHSERVE_URL")
+    if ts_url:
+        # POST image bytes to TorchServe predictions endpoint for model named 'pet'
+        buf = io.BytesIO()
+        image.save(buf, format="JPEG")
+        buf.seek(0)
+        try:
+            resp = requests.post(f"{ts_url.rstrip('/')}/predictions/pet", data=buf.getvalue(), headers={"Content-Type": "application/octet-stream"}, timeout=10)
+            resp.raise_for_status()
+        except Exception as e:
+            # On failure, fall back to local model
+            print(f"Warning: TorchServe request failed: {e}; falling back to local model")
+        else:
+            # TorchServe often returns plain text label or JSON; try to parse JSON first
+            ctype = resp.headers.get("Content-Type", "")
+            if "application/json" in ctype:
+                try:
+                    data = resp.json()
+                    # Expecting {'label': ..., 'confidence': ...} if custom handler
+                    if isinstance(data, dict) and "label" in data:
+                        return data.get("label"), float(data.get("confidence", 1.0))
+                    # Otherwise, try to interpret top-1
+                    if isinstance(data, list) and len(data) > 0:
+                        top = data[0]
+                        if isinstance(top, dict) and "label" in top:
+                            return top.get("label"), float(top.get("confidence", 1.0))
+                except Exception:
+                    pass
+            # Fallback: plain-text response is label
+            text = resp.text.strip()
+            if text:
+                return text, 1.0
+
+    # Local inference (original behavior)
     model = _get_model()
     img_t = _VAL_TRANSFORM(image).unsqueeze(0)  # 1,C,H,W
     with torch.no_grad():
