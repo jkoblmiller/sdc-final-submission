@@ -1,6 +1,25 @@
 version: '3.8'
 
 services:
+  model_server:
+    image: pytorch/torchserve:latest
+    container_name: pet_model_server
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    volumes:
+      - ./model-store:/home/model-server/model-store:ro
+    restart: unless-stopped
+    command: [
+      "torchserve",
+      "--start",
+      "--model-store",
+      "/home/model-server/model-store",
+      "--models",
+      "pet=pet.mar",
+      "--foreground"
+    ]
+
   api:
     build:
       context: ../2_FastAPI_Service
@@ -10,6 +29,10 @@ services:
       - "8000:8000"
     volumes:
       - ../models:/models:ro
+    environment:
+      - TORCHSERVE_URL=http://model_server:8080
+    depends_on:
+      - model_server
     restart: unless-stopped
 
   streamlit:

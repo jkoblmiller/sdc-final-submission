@@ -14,3 +14,16 @@ Final Goal: Provision of a web service where a user uploads a pet image via a St
 - Phase 2: Serve the model via FastAPI with a `/predict` endpoint.
 - Phase 3: Containerize the API with Docker.
 - Phase 4: Build a Streamlit frontend and run everything via Docker Compose.
+
+**Run / Deployment**
+
+- Run with Docker Compose (recommended):
+	- Ensure Docker Desktop / Docker daemon is running on your machine.
+	- From repository root run:
+		```powershell
+		docker compose -f Docker_Compose/docker-compose.yml up --build
+		```
+	- Services will be available at:
+		- FastAPI: `http://127.0.0.1:8000` (Swagger: `/docs`)
+		- Streamlit: `http://127.0.0.1:8501`
+
