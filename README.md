@@ -17,21 +17,6 @@ Final Goal: Provision of a web service where a user uploads a pet image via a St
 
 **Run / Deployment**
 
-- Run locally (no Docker):
-	- Install dependencies (prefer a venv):
-		```powershell
-		python -m pip install -r 2_FastAPI_Service/requirements.txt
-		python -m pip install -r 4_Streamlit_Frontend/requirements.txt
-		```
-	- Start the API (uvicorn):
-		```powershell
-		python -m uvicorn 2_FastAPI_Service.main:app --host 0.0.0.0 --port 8000 --reload
-		```
-	- Start Streamlit (in a separate terminal):
-		```powershell
-		streamlit run 4_Streamlit_Frontend/streamlit_app.py --server.port 8501
-		```
-
 - Run with Docker Compose (recommended):
 	- Ensure Docker Desktop / Docker daemon is running on your machine.
 	- From repository root run:
@@ -41,11 +26,4 @@ Final Goal: Provision of a web service where a user uploads a pet image via a St
 	- Services will be available at:
 		- FastAPI: `http://127.0.0.1:8000` (Swagger: `/docs`)
 		- Streamlit: `http://127.0.0.1:8501`
-
-**Troubleshooting**
-- If `docker compose` fails with daemon/pipe errors on Windows, make sure Docker Desktop is started. You can launch it from the Start menu or via PowerShell:
-	```powershell
-	Start-Process 'C:\Program Files\Docker\Docker\Docker Desktop.exe'
-	```
-- Ensure your trained model file exists at `./models/pet-classifier-resnet50.pth` before starting containers. The API will try to load it at startup; if missing, the service will still run but predictions will be from an uninitialized model.
 
